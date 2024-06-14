@@ -15,24 +15,30 @@ def query_bitcoind(payload):
     r = requests.post(url, headers=headers, data=json.dumps(payload)).json()
     return r
 
+def generate_payload(method, params):
+    payload = {"jsonrpc": "1.0", "id": "curltest", "method": method, "params": params}
+    return payload
+
 
 # FIRST CONNECTION
 
-payload = {"jsonrpc": "1.0", "id": "curltest", "method": "getblockcount", "params": []}
+payload = generate_payload("getblockcount", [])
 r = query_bitcoind(payload)
-
-# r = requests.post(url, headers=headers, data=json.dumps(payload)).json()
 print(r)
 
 latest_block_number = r['result']
 print(latest_block_number)
 
-payload = {"jsonrpc": "1.0", "id": "curltest", "method": "getblockhash", "params": [latest_block_number]}
+payload = generate_payload("getblockhash", [latest_block_number])
 r = query_bitcoind(payload)
 print(r)
 
 
-payload = {"jsonrpc": "1.0", "id": "curltest", "method": "getblock", "params": [r['result']]}
+payload = generate_payload("getblock", [r['result'], 2])
 r = query_bitcoind(payload)
-print(r['result']['tx'])
+print(r)
+
 print(f"the block {latest_block_number} has {len(r['result']['tx'])} transactions.")
+
+
+#get raw transaction
