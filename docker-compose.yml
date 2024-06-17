@@ -1,0 +1,17 @@
+version: '3'
+services:
+  bitcoind:
+    build: ./bitcoind  # Path to the directory containing Dockerfile
+    ports:
+      - "8333:8333"  # Map container's port 8333 to host's port 8333
+    volumes:
+      - bitcoin-data:/root/.bitcoin  # Persist blockchain data
+    networks:
+      - bitcoin-net
+
+networks:
+  bitcoin-net:
+
+volumes:
+  bitcoin-data:
+    driver: local
